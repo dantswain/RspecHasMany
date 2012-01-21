@@ -7,6 +7,10 @@ describe Thing do
     @thing = Thing.create!(:name => "Foo")
 
     @user.things << @thing
+
+    # it doesn't matter if we do this or not
+    # @thing.save
+    # @user.save
   end
 
   it "should have created a relationship" do
@@ -15,7 +19,6 @@ describe Thing do
   end
 
   it "should have followers" do
-    @thing.save
     @thing.followers.should == [@user]
   end
   
