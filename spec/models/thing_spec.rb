@@ -8,9 +8,12 @@ describe Thing do
 
     @user.things << @thing
 
-    # it doesn't matter if we do this or not
-    # @thing.save
-    # @user.save
+    # this is necessary to trigger the callbacks for @thing
+    #   I'm ok with this because what will happen in the wild is
+    #    a) user will following thing, then at some point later
+    #    b) thing is updated (which means a save), and user should
+    #        be notified of save
+    @thing.save
   end
 
   it "should have created a relationship" do
@@ -19,7 +22,12 @@ describe Thing do
   end
 
   it "should have followers" do
-    @thing.followers.should == [@user]
+    @thing.reload.followers.should == [@user]
+  end
+
+  # I added this just to make sure the callback is run
+  it "should run the callback" do
+    @user.reload.name.should match("FOLLOWER")
   end
   
 end
